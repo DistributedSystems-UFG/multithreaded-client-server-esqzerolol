@@ -1,34 +1,51 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/7EVNAYx2)
+
 # ClientServerBasics (2.0)
-# Calculadora
-Sistema simples de calculadora usando TCP em Python.
 
-Arquivos:
-- Server.py – servidor que faz os cálculos
-- Client.py – cliente que envia números e operação
-- constCS.py – define HOST e PORT
+## Calculadora Distribuída com Teste de Carga
 
-Como usar:
+Sistema cliente-servidor utilizando sockets TCP em Python para execução de operações matemáticas simples, com suporte a múltiplos servidores e geração concorrente de requisições para avaliação de desempenho.
 
-1. Rodar o servidor na máquina:
-modifique o constCS.py do servidor para ter HOST = '0.0.0.0'
-python3 Server.py
+---
 
-3. Rodar o cliente na outra máquina:
-modifique o constCS.py do cliente para ter HOST = (IP do servidor)
-python3 Client.py
+## Arquivos
 
-5. No cliente, informar os números e operação. Exemplo de entrada:
-Enter first number: 10
-Enter second number: 5
-Operation (0=sum, 1=sub, 2=mult, 3=div): 0
+- `server.py` – servidor TCP multithread responsável por processar requisições
+- `client.py` – cliente concorrente que gera múltiplas requisições automaticamente
+- `constCS.py` – configuração de rede (HOST, PORT e lista de servidores)
 
-6. Saída esperada:
-Result: 15
-Time taken: 0.000123 seconds
+---
 
-7. Outras operações:
-10 5 1 → Result: 5       (subtração)
-10 5 2 → Result: 50      (multiplicação)
-10 5 3 → Result: 2       (divisão)
-10 0 3 → Result: Error: division by zero
+## Funcionalidades
+
+- Operações suportadas:
+  - Soma
+  - Subtração
+  - Multiplicação
+  - Divisão (com tratamento de divisão por zero)
+
+- Servidor:
+  - Multithread (uma thread por conexão)
+  - Retorna resultado + tempo de processamento
+
+- Cliente:
+  - Geração automática de requisições aleatórias
+  - Execução concorrente com `ThreadPoolExecutor`
+  - Balanceamento simples via escolha aleatória de servidores
+  - Coleta de métricas:
+    - RTT (tempo de ida e volta)
+    - Tempo de processamento
+    - Taxa de perda
+    - Tempo total
+
+---
+
+## Configuração
+
+### Servidor
+
+No arquivo `constCS.py`, configure:
+
+```python
+HOST = "0.0.0.0"
+PORT = 5678  # altere para cada instância de servidor
